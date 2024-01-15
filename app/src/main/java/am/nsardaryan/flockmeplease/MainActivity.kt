@@ -99,7 +99,7 @@ fun FlockScreen() {
                     radius = PROTECTED_RANGE,
                     center = b.position
                 )
-//                 drawArrow(b.position, b.speed.times(10f), color = mainBoidColor)
+                 drawArrow(b.position, b.speed, color = mainBoidColor)
             }
         }
 

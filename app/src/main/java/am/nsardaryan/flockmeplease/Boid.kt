@@ -22,31 +22,31 @@ class Boid(
         )
     }
 
-    private fun separation(neighbors: List<Boid>): Offset {
+    private fun separation(neighbors: List<Boid>?): Offset {
         var steering = Offset.Zero
-        neighbors.forEach { n ->
+        neighbors?.forEach { n ->
             steering = steering.plus(position.minus(n.position))
         }
-        return if (neighbors.isNotEmpty()) (steering.div(neighbors.size.toFloat())).limit(MAX_FORCE) else steering
+        return if (neighbors?.isNotEmpty() == true) (steering.div(neighbors.size.toFloat())).limit(MAX_FORCE) else steering
     }
 
-    private fun cohesion(neighbors: List<Boid>): Offset {
+    private fun cohesion(neighbors: List<Boid>?): Offset {
         var steering = Offset.Zero
-        neighbors.forEach { n ->
+        neighbors?.forEach { n ->
             steering = steering.plus(n.position)
         }
-        return if (neighbors.isNotEmpty()) (steering.div(neighbors.size.toFloat())).minus(position).limit(MAX_FORCE) else steering
+        return if (neighbors?.isNotEmpty() == true) (steering.div(neighbors.size.toFloat())).minus(position).limit(MAX_FORCE) else steering
     }
 
-    private fun align(neighbors: List<Boid>): Offset {
+    private fun align(neighbors: List<Boid>?): Offset {
         var steering = Offset.Zero
-        neighbors.forEach { n ->
+        neighbors?.forEach { n ->
             steering = steering.plus(n.speed)
         }
-        return if (neighbors.isNotEmpty()) speed.plus(steering.div(neighbors.size.toFloat())).limit(MAX_FORCE) else steering
+        return if (neighbors?.isNotEmpty() == true) speed.plus(steering.div(neighbors.size.toFloat())).limit(MAX_FORCE) else steering
     }
 
-    fun update(protectedNeighbors: List<Boid>, visibleNeighbors: List<Boid>, realDelta: Float) {
+    fun update(protectedNeighbors: List<Boid>?, visibleNeighbors: List<Boid>?, realDelta: Float) {
         forces = separation(protectedNeighbors).times(flock.separationValue)
                  .plus(cohesion(visibleNeighbors).times(flock.cohesionValue))
                  .plus(align(visibleNeighbors).times(flock.alignValue))

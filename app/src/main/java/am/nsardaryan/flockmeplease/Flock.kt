@@ -49,28 +49,41 @@ class Flock() {
         val floatDelta = (delta / 1E8).toFloat()
         prevTime = time
 
+        val visibleNeighborsMap: HashMap<Boid, MutableList<Boid>> = hashMapOf()
+        val protectedNeighborsMap: HashMap<Boid, MutableList<Boid>> = hashMapOf()
+
         for (boid in boids) {
 
-            val visibleNeighbors = mutableListOf<Boid>()
-            val protectedNeighbors = mutableListOf<Boid>()
+            if (!visibleNeighborsMap.containsKey(boid) && !protectedNeighborsMap.containsKey(boid)) {
+                visibleNeighborsMap[boid] = mutableListOf()
+                protectedNeighborsMap[boid] = mutableListOf()
+            }
 
             for (other in boids) {
                 if (boid != other) {
-                    val squaredDistance = boid.position.minus(other.position).getDistanceSquared()
 
-                    if (squaredDistance <= PROTECTED_RANGE * PROTECTED_RANGE) {
-                        protectedNeighbors.add(other)
-                    } else if (squaredDistance <= VISIBLE_RANGE * VISIBLE_RANGE) {
-                        visibleNeighbors.add(other)
+                    if (protectedNeighborsMap[other]?.contains(boid) == true) {
+                        protectedNeighborsMap[boid]?.add(other)
+                    } else if (visibleNeighborsMap[other]?.contains(boid) == true) {
+                        visibleNeighborsMap[boid]?.add(other)
+                    } else {
+                        val squaredDistance = boid.position.minus(other.position).getDistanceSquared()
+                        if (squaredDistance <= PROTECTED_RANGE * PROTECTED_RANGE) {
+                            protectedNeighborsMap[boid]?.add(other)
+                        } else if (squaredDistance <= VISIBLE_RANGE * VISIBLE_RANGE) {
+                            visibleNeighborsMap[boid]?.add(other)
+                        }
                     }
                 }
             }
 
             boid.update(
-                protectedNeighbors = protectedNeighbors,
-                visibleNeighbors = visibleNeighbors,
+                protectedNeighbors = protectedNeighborsMap[boid]?.toList(),
+                visibleNeighbors = visibleNeighborsMap[boid]?.toList(),
                 realDelta = floatDelta
             )
+            protectedNeighborsMap.clear()
+            visibleNeighborsMap.clear()
         }
     }
 }

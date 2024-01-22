@@ -4,9 +4,9 @@ package am.nsardaryan.flockmeplease
 
 import am.nsardaryan.flockmeplease.ui.theme.Background
 import am.nsardaryan.flockmeplease.ui.theme.BoidColor
+import am.nsardaryan.flockmeplease.ui.theme.BottomColor
 import am.nsardaryan.flockmeplease.ui.theme.FlockmepleaseTheme
 import am.nsardaryan.flockmeplease.ui.theme.Typography
-import am.nsardaryan.flockmeplease.ui.theme.BottomColor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,17 +24,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +45,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
@@ -138,9 +136,10 @@ fun FlockSettings(
         ) {
             Text(text = "Settings", style = Typography.headlineMedium)
             IconButton(onClick = {
-                onSeparationChange.invoke(0f)
-                onCohesionChange.invoke(0f)
-                onAlignChange.invoke(0f)
+                onCountChange.invoke(Random.nextInt(60, 100))
+                onSeparationChange.invoke(Random.nextFloat())
+                onCohesionChange.invoke(Random.nextFloat())
+                onAlignChange.invoke(Random.nextFloat())
             }) {
                 Icon(imageVector = Icons.Filled.Refresh, "Reset")
 
